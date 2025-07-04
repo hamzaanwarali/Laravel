@@ -2,7 +2,7 @@ FROM php:8.2-apache
 
 WORKDIR /var/www/html
 
-# تثبيت dependencies
+# تثبيت dependencies النظام
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -10,14 +10,22 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     zip \
-    unzip \
-    && docker-php-ext-install pdo pdo_mysql mbstring
+    unzip
 
-# نسخ ملفات المشروع
-COPY . .
+# تثبيت إضافات PHP
+RUN docker-php-ext-install pdo pdo_mysql mbstring
 
 # تثبيت Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# نسخ ملفات Composer أولاً (لتحسين بناء الصورة)
+COPY composer.json composer.lock ./
+
+# تثبيت حزم PHP (مع تحسينات للأداء)
+RUN composer install --no-dev --optimize-autoloader --no-interaction
+
+# نسخ كل الملفات
+COPY . .
 
 # صلاحيات المجلدات
 RUN chown -R www-data:www-data /var/www/html/storage
@@ -31,5 +39,4 @@ RUN a2enmod rewrite
 # تنظيف الذاكرة
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# أمر التشغيل
 CMD ["apache2-foreground"]
