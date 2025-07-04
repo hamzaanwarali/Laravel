@@ -2,41 +2,37 @@ FROM php:8.2-apache
 
 WORKDIR /var/www/html
 
-# تثبيت dependencies النظام
+# 1. تثبيت dependencies النظام الأساسية
 RUN apt-get update && apt-get install -y \
     git \
     curl \
+    libzip-dev \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
     zip \
-    unzip
+    unzip \
+    && docker-php-ext-install pdo pdo_mysql mbstring zip
 
-# تثبيت إضافات PHP
-RUN docker-php-ext-install pdo pdo_mysql mbstring
+# 2. تثبيت Composer (بنسخة مستقرة)
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --version=2.6.5
 
-# تثبيت Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# نسخ ملفات Composer أولاً (لتحسين بناء الصورة)
+# 3. نسخ فقط ملفات Composer أولاً (لتحسين البناء)
 COPY composer.json composer.lock ./
 
-# تثبيت حزم PHP (مع تحسينات للأداء)
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+# 4. تثبيت الحزم مع تحسينات للأمان والأداء
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts \
+    || (echo "Composer install failed, retrying..." && composer clear-cache && composer install --no-dev --optimize-autoloader --no-interaction --no-scripts)
 
-# نسخ كل الملفات
+# 5. نسخ باقي الملفات
 COPY . .
 
-# صلاحيات المجلدات
-RUN chown -R www-data:www-data /var/www/html/storage
-RUN chmod -R 775 /var/www/html/storage
+# 6. إعدادات الصلاحيات
+RUN chown -R www-data:www-data storage bootstrap/cache
+RUN chmod -R 775 storage bootstrap/cache
 
-# إعدادات Apache
-COPY .docker/000-default.conf /etc/apache2/sites-available/
-RUN a2ensite 000-default.conf
-RUN a2enmod rewrite
-
-# تنظيف الذاكرة
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+# 7. إعداد Apache
+COPY .docker/apache.conf /etc/apache2/sites-available/000-default.conf
+RUN a2ensite 000-default.conf && a2enmod rewrite
 
 CMD ["apache2-foreground"]
