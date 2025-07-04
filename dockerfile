@@ -19,3 +19,6 @@ COPY . .
 RUN composer install --no-dev
 
 RUN chmod -R 775 storage
+RUN chown -R www-data:www-data /var/www/html/storage
+RUN chmod -R 775 /var/www/html/storage
+RUN a2enmod rewrite
