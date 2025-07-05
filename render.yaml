@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: bonus  # يمكنك تغيير الاسم
+    runtime: php
+    buildCommand: "./render-build.sh"
+    startCommand: "php artisan serve --host=0.0.0.0 --port=8000"
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_KEY
+        generateValue: true  # مهم! سيتم توليد APP_KEY تلقائيًا
+      - key: APP_DEBUG
+        value: false
