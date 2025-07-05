@@ -2,40 +2,35 @@ FROM php:8.2-apache
 
 WORKDIR /var/www/html
 
-# 1. تثبيت التبعيات الأساسية
+# 1. تثبيت التبعيات
 RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    libzip-dev \
-    zip \
-    unzip \
+    git curl libpng-dev libonig-dev libxml2-dev libzip-dev zip unzip \
     && docker-php-ext-install pdo pdo_mysql mbstring zip
 
 # 2. تثبيت Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# 3. نسخ ملفات Composer أولاً (لتحسين البناء)
+# 3. نسخ الملفات الأساسية أولاً
 COPY composer.json composer.lock ./
 
-# 4. تثبيت الحزم مع تحسينات
+# 4. تثبيت الحزم
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
 # 5. نسخ كل الملفات
 COPY . .
 
-# 6. تنفيذ أوامر Artisan
-RUN composer run-script post-autoload-dump
+# 6. إعداد الصلاحيات (مهم جداً)
+RUN chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
 
-# 7. إعداد الصلاحيات
-RUN chown -R www-data:www-data storage bootstrap/cache
-RUN chmod -R 775 storage bootstrap/cache
-
-# 8. تكوين Apache
+# 7. تكوين Apache
 COPY .docker/000-default.conf /etc/apache2/sites-available/
-RUN a2enmod rewrite && a2ensite 000-default.conf
+RUN a2ensite 000-default.conf && a2enmod rewrite
 
-# 9. أمر التشغيل
+# 8. إنشاء .env من .env.production إذا لم يكن موجوداً
+RUN if [ ! -f .env ]; then \
+        cp .env.production .env && \
+        php artisan key:generate; \
+    fi
+
 CMD ["apache2-foreground"]
