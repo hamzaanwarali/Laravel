@@ -1,26 +1,47 @@
-*.log
+# ملفات النظام
 .DS_Store
+Thumbs.db
+
+# ملفات البيئة والإعدادات
 .env
 .env.backup
 .env.production
 .phpactor.json
 .phpunit.result.cache
+/auth.json
+Homestead.json
+Homestead.yaml
+
+# مجلدات IDE
 /.fleet
 /.idea
 /.nova
-/.phpunit.cache
 /.vscode
 /.zed
-/auth.json
-/node_modules
+/.phpunit.cache
+
+# تبعيات المشروع
+/vendor/
+/node_modules/
+
+# ملفات السجلات
+*.log
+npm-debug.log
+yarn-error.log
+
+# ملفات Laravel المترجمة
 /public/build
 /public/hot
 /public/storage
 /storage/*.key
 /storage/pail
-/vendor
-Homestead.json
-Homestead.yaml
-npm-debug.log
-Thumbs.db
-yarn-error.log
+
+# ⚠️ الاستثناءات الضرورية (مهم جداً!)
+!/storage/framework/
+!/storage/logs/
+!/storage/app/public/
+!/bootstrap/cache/
+
+# استثناءات إضافية آمنة
+!public/storage/uploads/
+!public/storage/images/
