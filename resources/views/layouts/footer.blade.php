@@ -28,41 +28,35 @@
                 <ul class="footer-links">
                     <li><a href="{{ route('dashboard') }}">لوحة التحكم</a></li>
                     <li><a href="{{ route('dashboard') }}">المهام</a></li>
-                    <li><a href="{{ route('dashboard')}}">المكافآت</a></li>
+                    <li><a href="{{ route('rewards.index')}}">المكافآت</a></li>
                     <li><a href="{{ route('dashboard') }}">الملف الشخصي</a></li>
                 </ul>
             </div>
 
-            <!-- Support -->
-            <div class="footer-section">
-                <h3>الدعم والمساعدة</h3>
-                <ul class="footer-links">
-                    
-                </ul>
-            </div>
+            
 
             <!-- Contact Info -->
             <div class="footer-section">
-                <h3>معلومات التواصل</h3>
+                <h3>معلومات المساعدة والتواصل</h3>
                 <div class="contact-info">
                     <div class="contact-item">
                         <i class="fas fa-envelope"></i>
-                        <span>support@taskmanager.com</span>
+                        <span>للتواصل معنا عبر الواتساب </span>
                     </div>
                     
                     <div class="contact-item">
                         <i class="fas fa-phone"></i>
-                        <span>+966 11 123 4567</span>
+                        <span>+967733481503</span>
                     </div>
                     
                     <div class="contact-item">
                         <i class="fas fa-map-marker-alt"></i>
-                        <span>الرياض، المملكة العربية السعودية</span>
+                        <span>اليمن - تعز </span>
                     </div>
                     
                     <div class="contact-item">
                         <i class="fas fa-clock"></i>
-                        <span>الأحد - الخميس: 9:00 ص - 6:00 م</span>
+                        <span>على مدار 24ساعة </span>
                     </div>
                 </div>
 
@@ -76,7 +70,7 @@
         <div class="footer-bottom">
             <div class="footer-bottom-content">
                 <div class="copyright">
-                    <p>&copy; {{ date('Y') }} نظام إدارة المهام. جميع الحقوق محفوظة.</p>
+                    <p>&copy; {{ date('Y') }} xXxGHxXx. جميع الحقوق محفوظة.</p>
                 </div>
                 
                 <div class="footer-bottom-links">

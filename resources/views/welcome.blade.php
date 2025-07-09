@@ -43,6 +43,7 @@
 <body>
     <!-- Header -->
     <header class="header">
+        
         <div class="container">
             <nav class="navbar">
                 <a href="#" class="navbar-brand">
@@ -50,15 +51,32 @@
                     <span>نظام المهام</span>
                 </a>
 
+                <div class="component-demo">
+                   
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <a href ="{{route('login')}}" > 
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-check"></i>
+                            الدخول 
+                        </button>
+                        </a>
+                             <a href ="{{route('register')}}" > 
+                        <button class="btn btn-outline">
+                            <i class="fas fa-edit"></i>
+                           التسجيل
+                        </button>
+                            </a>
+                    </div>
+                </div>
                 <button class="navbar-toggle" type="button">
                     <i class="fas fa-bars"></i>
                 </button>
 
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a href="#" class="nav-link active">
+                        <a href="{{route('dashboard')}}" class="nav-link active">
                             <i class="fas fa-tachometer-alt"></i>
-                            <span>لوحة التحكم</span>
+                            <span> لوحة التحكم</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -68,7 +86,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{route('rewards.index')}}" class="nav-link">
                             <i class="fas fa-gift"></i>
                             <span>المكافآت</span>
                         </a>
