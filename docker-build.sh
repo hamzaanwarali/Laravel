@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # إنشاء .env إذا لم يكن موجودًا
-if [ ! -f .env ]; then
-    cp .env.example .env
-    php artisan key:generate --force
-fi
+#if [ ! -f .env ]; then
+ #   cp .env.example .env
+  #  php artisan key:generate --force
+#fi
 
 # إصلاح الصلاحيات
 chown -R www-data:www-data storage bootstrap/cache
