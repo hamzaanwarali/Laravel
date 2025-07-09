@@ -8,7 +8,6 @@ fi
 
 # تركيب Composer وتهيئة Laravel
 composer install --no-dev --optimize-autoloader
-php artisan key:generate  # إذا لم يتم توليده تلقائيًا
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
