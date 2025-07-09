@@ -1,11 +1,40 @@
+databases:
+  - name: myproject  # ⚠️ يجب أن يتطابق مع اسم خدمة DB في Render
+    databaseName: myproject
+    user: root          # اسم المستخدم المطلوب
+    plan: free          # PostgreSQL مجاني
+
 services:
   - type: web
-    name:  bonus  # يمكنك تغيير الاسم
-    runtime: docker    # ⚠️ مهم: اختر Docker
-    buildCommand: "./docker-build.sh"  # سننشئ هذا الملف
-    startCommand: "apache2-foreground"  # تشغيل Apache
+    name: bonus
+    runtime: docker
+    buildCommand: "./docker-build.sh"
+    startCommand: "apache2-foreground"
     envVars:
       - key: APP_ENV
         value: production
-        - key: APP_DEBUG
+      - key: APP_DEBUG
         value: false
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        fromDatabase:
+          name: myproject
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: myproject
+          property: port
+      - key: DB_DATABASE
+        fromDatabase:
+          name: myproject
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: myproject
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: myproject
+          property: password
+    plan: free
