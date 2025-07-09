@@ -22,6 +22,13 @@
                         <span>لوحة التحكم</span>
                     </a>
                 </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('cards.redeem') }}" class="nav-link">
+                        <i class="fas fa-credit-card"></i>
+                        <span>الكروت</span>
+                    </a>
+                </li>
                 
                 <li class="nav-item">
                     <a href="{{ route('dashboard') }}" class="nav-link">
@@ -31,7 +38,7 @@
                 </li>
                 
                 <li class="nav-item">
-                <a href="{{ route('dashboard') }}" class="nav-link">
+                <a href="{{ route('rewards.index') }}" class="nav-link">
                             <i class="fas fa-gift"></i>
                         <span>المكافآت</span>
                     </a>
@@ -44,33 +51,7 @@
                     </a>
                 </li>
 
-                <!-- User Dropdown -->
-                <li class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
-                        <img src="{{ auth()->user()->avatar ?? asset('images/default-avatar.png') }}" 
-                             alt="صورة المستخدم" 
-                             class="user-avatar"
-                             width="32" 
-                             height="32">
-                        <span>{{ auth()->user()->name ?? 'المستخدم' }}</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </a>
-                    
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a href="{{ route('dashboard') }}" class="dropdown-item">
-                                <i class="fas fa-user"></i>
-                                <span>الملف الشخصي</span>
-                            </a>
-                        </li>
-                        
-                        <li>
-                            <a href="{{ route('dashboard') }}" class="dropdown-item">
-                                <i class="fas fa-cog"></i>
-                                <span>الإعدادات</span>
-                            </a>
-                        </li>
-                        
+                                        
                         <li class="dropdown-divider"></li>
                         
                         <li>
@@ -85,12 +66,13 @@
                     </ul>
                 </li>
 
-                <!-- Theme Switcher -->
+                <!-- Theme Switcher 
                 <li class="nav-item">
                     <button class="nav-link theme-switcher" type="button" aria-label="تغيير المظهر">
                         <i class="fas fa-moon"></i>
                     </button>
                 </li>
+-->
 
                 <!-- Notifications 
                 <li class="nav-item">

@@ -1,36 +1,38 @@
+# استخدام صورة PHP مع Apache
 FROM php:8.2-apache
 
-WORKDIR /var/www/html
-
-# 1. تثبيت التبعيات
+# تثبيت dependencies + إعدادات Laravel
 RUN apt-get update && apt-get install -y \
-    git curl libpng-dev libonig-dev libxml2-dev libzip-dev zip unzip \
-    && docker-php-ext-install pdo pdo_mysql mbstring zip
+    git \
+    curl \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    unzip \
+    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-# 2. تثبيت Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# تفعيل Apache mod_rewrite
+RUN a2enmod rewrite
 
-# 3. نسخ الملفات الأساسية أولاً
-COPY composer.json composer.lock ./
+# تثبيت Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# 4. تثبيت الحزم
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
+# إنشاء مجلد المشروع وتعيين الصلاحيات
+WORKDIR /var/www/html
+RUN chown -R www-data:www-data /var/www/html
 
-# 5. نسخ كل الملفات
+# نسخ ملفات المشروع
 COPY . .
 
-# 6. إعداد الصلاحيات (مهم جداً)
-RUN chown -R www-data:www-data storage bootstrap/cache \
-    && chmod -R 775 storage bootstrap/cache
-
-# 7. تكوين Apache
-COPY .docker/000-default.conf /etc/apache2/sites-available/
-RUN a2ensite 000-default.conf && a2enmod rewrite
-
-# 8. إنشاء .env من .env.production إذا لم يكن موجوداً
+# تركيب dependencies وإنشاء .env
 RUN if [ ! -f .env ]; then \
-        cp .env.production .env && \
+        cp .env.example .env && \
+        composer install --no-dev --optimize-autoloader && \
         php artisan key:generate; \
     fi
 
-CMD ["apache2-foreground"]
+# تعيين Apache ليشير إلى مجلد public
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
