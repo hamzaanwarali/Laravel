@@ -1,8 +1,8 @@
 databases:
-  - name: myproject  # ⚠️ يجب أن يتطابق مع اسم خدمة DB في Render
-    databaseName: myproject_exii
-    user: root          # اسم المستخدم المطلوب
-    plan: free          # PostgreSQL مجاني
+  - name: myproject       # ⚠️ يجب أن يتطابق مع اسم الخدمة في لوحة Render
+    databaseName: myproject_exii  # اسم قاعدة البيانات الداخلي
+    user: root            # اسم المستخدم الذي اخترته عند الإنشاء
+    plan: free            # الخطة المجانية
 
 services:
   - type: web
@@ -21,22 +21,20 @@ services:
         value: pgsql
       - key: DB_HOST
         fromDatabase:
-          name: myproject_exii
+          name: myproject  # ⚠️ يشير إلى اسم الخدمة (وليس اسم DB)
           property: host
       - key: DB_PORT
         fromDatabase:
-          name: myproject_exii
+          name: myproject
           property: port
       - key: DB_DATABASE
-        fromDatabase:
-          name: myproject_exii
-          property: database
+        value: "myproject_exii"  # ⚠️ هنا نستخدم اسم DB الفعلي مباشرة
       - key: DB_USERNAME
         fromDatabase:
-          name: myproject_exii
+          name: myproject
           property: user
       - key: DB_PASSWORD
         fromDatabase:
-          name: myproject_exii
+          name: myproject
           property: password
     plan: free
