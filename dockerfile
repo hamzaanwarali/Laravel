@@ -51,9 +51,7 @@ RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs && \
     php artisan route:cache && \
     php artisan view:cache
 
-# الصحة التشغيلية (Health Check)
-HEALTHCHECK --interval=30s --timeout=3s \
-    CMD curl -f http://localhost/ || exit 1
+
 
 # الأمر الافتراضي عند التشغيل
 CMD ["apache2-foreground"]
