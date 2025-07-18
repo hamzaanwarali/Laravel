@@ -1,9 +1,13 @@
+envVars:
+  - key: APP_KEY
+    generateValue: true  
+
 databases:
   - name: myproject       # ⚠️ يجب أن يتطابق مع اسم الخدمة في لوحة Render
     databaseName: myproject_exii  # اسم قاعدة البيانات الداخلي
     user: root            # اسم المستخدم الذي اخترته عند الإنشاء
-    plan: free            # الخطة المجانية
-
+    plan: free
+                # الخطة المجانية
 services:
   - type: web
     name: bonus
