@@ -1,20 +1,24 @@
-FROM php:8.3-cli
+FROM php:8.2-apache
 
-# تثبيت الإضافات الأساسية
+# تثبيت dependencies الأساسية
 RUN apt-get update && apt-get install -y \
-    zip unzip libzip-dev \
-    && docker-php-ext-install pdo pdo_mysql zip
+    git \
+    unzip \
+    libzip-dev \
+    && docker-php-ext-install zip pdo_mysql
 
-# نسخ المشروع
+# تثبيت Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# نسخ المشروع وتعيين الصلاحيات
 WORKDIR /var/www/html
 COPY . .
-
-# الصلاحيات والتجهيز
+RUN chown -R www-data:www-data /var/www/html/storage
 RUN chmod -R 775 storage bootstrap/cache
-RUN composer install --no-dev --optimize-autoloader
-RUN php artisan key:generate --force
 
-# استخدام Apache بدل CLI إن أردت
-FROM php:8.3-apache
-COPY --from=0 /var/www/html /var/www/html
+# تثبيت dependencies
+RUN composer install --no-dev --optimize-autoloader
+
+# تهيئة Apache
 RUN a2enmod rewrite
+COPY .docker/vhost.conf /etc/apache2/sites-available/000-default.conf
