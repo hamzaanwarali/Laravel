@@ -96,7 +96,7 @@ Route::get('/auth/google/callback', [GoogleAuthController::class, 'handleGoogleC
 
 Route::get('/test-google', function() {
       return Socialite::driver('google')
-          ->redirectUrl('http://localhost/auth/google/callback')
+          ->redirectUrl('http://127.0.0.1:8000/auth/google/callback')
           ->redirect();
   });
 

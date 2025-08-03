@@ -1,6 +1,29 @@
 
+<html dir="rtl" lang=ar>
 
 <header class="header">
+
+    <div class="col-md-4">
+        <div class="card bg-primary text-white p-3 text-center">
+             <a  class="navbar-brand">
+                    @if (auth()->user())
+                        
+                       <div class="hero-stats">
+                        <div class="hero-stat">
+                            <span class="hero-stat-label">إجمالي النقاط : </span>
+                        <span class="hero-stat-number points-counter" data-target="{{auth()->user()->points()->sum('amount');}} " data-duration="2000">0</span>
+
+                        </div>
+            <span> 
+                
+            نقطة 
+        <i class="fas fa-coins"></i> </span>
+                        
+@endif
+            </a>
+        </div>
+    </div>
+
     <div class="container">
         <nav class="navbar">
             <!-- Brand Logo -->
@@ -44,14 +67,7 @@
                     </a>
                 </li>
                 
-                <li class="nav-item">
-                    <a href="{{ route('dashboard') }}" class="nav-link">
-                        <i class="fas fa-user"></i>
-                        <span>الملف الشخصي</span>
-                    </a>
-                </li>
-
-                                        
+                                                    
                         <li class="dropdown-divider"></li>
                         
                         <li>
@@ -153,3 +169,4 @@
 </nav>
 @endif
 
+</html>
