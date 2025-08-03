@@ -28,10 +28,9 @@ RUN if ! php artisan key:generate --force; then \
     echo -e "APP_KEY=\n" >> .env && \
     php artisan key:generate --force; \
     fi
-
-# 8. تهيئة الجلسات وقاعدة البيانات
-RUN php artisan session:table && \
-    php artisan migrate --force
+    
+RUN (php artisan session:table || true) && \
+    (php artisan migrate --force || true)
 
 # 9. تكوين Apache
 RUN echo "<VirtualHost *:80>\n\
