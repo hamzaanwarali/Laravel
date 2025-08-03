@@ -19,6 +19,20 @@ use App\Models\PrepaidCard;
 use Illuminate\Support\Str;
 
 
+Route::get('/test-db', function() {
+    try {
+        DB::connection()->getPdo();
+        return "Connected successfully to PostgreSQL! Sessions table exists: " . 
+               (Schema::hasTable('sessions') ? 'Yes' : 'No');
+    } catch (\Exception $e) {
+        return "Error: " . $e->getMessage();
+    }
+});
+
+
+
+
+
 Route::get('/', function () {
     return view('welcome');
 });
