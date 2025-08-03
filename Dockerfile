@@ -1,7 +1,7 @@
-# استخدام صورة رسمية من PHP مع Apache
+# Use official PHP image with Apache
 FROM php:8.2-apache
 
-# تثبيت حزم النظام الأساسية + إضافات PostgreSQL
+# Install system dependencies and PHP extensions
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
@@ -9,25 +9,25 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
-    libpq-dev \          # حزمة PostgreSQL الأساسية
+    libpq-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install \
     pdo \
-    pdo_pgsql \         # إضافة دعم PostgreSQL
-    pdo_mysql \         # اختياري (إذا كنت تستخدم MySQL أيضًا)
+    pdo_pgsql \
+    pdo_mysql \
     zip \
     gd \
     bcmath \
     opcache
 
-# تثبيت Composer
+# Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# تهيئة مجلد العمل ونسخ الملفات
+# Set working directory and copy files
 WORKDIR /var/www/html
 COPY . .
 
-# تعيين الصلاحيات (ضروري لـ Laravel)
+# Set permissions
 RUN chown -R www-data:www-data \
     storage \
     bootstrap/cache \
@@ -35,12 +35,12 @@ RUN chown -R www-data:www-data \
     storage \
     bootstrap/cache
 
-# تثبيت التبعيات (بدون حزم التطوير)
+# Install dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# تهيئة Apache
+# Configure Apache
 RUN a2enmod rewrite
 COPY .docker/apache.conf /etc/apache2/sites-available/000-default.conf
 
-# تعليمات التشغيل
+# Start command
 CMD ["apache2-foreground"]
