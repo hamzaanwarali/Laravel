@@ -24,10 +24,10 @@ RUN if [ ! -f .env ]; then cp .env.example .env; fi
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # 7. توليد APP_KEY (مع حل بديل إذا فشل)
-RUN if ! php artisan key:generate --force; then \
-    echo -e "APP_KEY=\n" >> .env && \
-    php artisan key:generate --force; \
-    fi
+# RUN if ! php artisan key:generate --force; then \
+#  echo -e "APP_KEY=\n" >> .env && \
+#   php artisan key:generate --force; \
+#   fi
     
 RUN (php artisan session:table || true) && \
     (php artisan migrate --force || true)
